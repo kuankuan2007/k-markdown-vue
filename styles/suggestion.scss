@@ -1,0 +1,65 @@
+@use 'highlight.js/scss/monokai-sublime.scss' as *;
+
+code {
+  font-family: 'monaspace neon', 'fira code', monospace;
+}
+
+.k-md-node-code-block {
+  padding: 1em;
+  background-color: rgba(black, 0.2);
+  border-radius: 0.5em;
+  position: relative;
+  overflow: hidden;
+
+  .lang {
+    font-size: 0.6em;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(white, 0.1);
+    padding: 0.3em 1em;
+    border-radius: 0.5em;
+  }
+}
+.k-md-node-code-inline {
+  code {
+    font-family: 'monaspace neon', 'fira code', monospace;
+    padding: 0.2em 0.3em;
+    border-radius: 0.3em;
+    background-color: rgba(white, 0.08);
+  }
+}
+blockquote {
+  margin: 0;
+  padding: 0.5em 1em;
+  border-left: solid 0.8em rgba(white, 0.1);
+  border-radius: 0.5em;
+  background-color: rgba(black, 0.2);
+  blockquote {
+    margin-left: -0.5em;
+    padding-right: 0;
+  }
+}
+@function repeat-string($str, $num) {
+  $result: "";
+  @for $i from 1 through $num {
+    $result: $result + $str;
+  }
+  @return $result;
+}
+@for $i from 1 through 6 {
+  h#{$i} {
+    &::before {
+      content: repeat-string("#", $i) + " ";
+      opacity: 0.5;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  }
+}
+table{
+  border-collapse: collapse;
+  td{
+    border: 1px solid rgba(white, 0.5);
+  }
+}
