@@ -8,12 +8,12 @@
 <script setup lang="ts">
 import type { KMarkdownXMLNode } from '@kuankuan/k-markdown-parser/nodes/core';
 import { optionSymbol } from '../symbles';
-import { inject } from 'vue';
+import { computed, inject } from 'vue';
 
 defineProps<{
     node: KMarkdownXMLNode
 }>()
-const xmlOptions = inject(optionSymbol)?.xml || 'warn';
+const xmlOptions = computed(() => inject(optionSymbol)?.value.xml || 'warn');
 </script>
 <style scoped lang="scss">
 .k-md-node-xml-warn {

@@ -12,7 +12,7 @@ const props = defineProps<{
 const parser = inject(parserSymbol);
 
 
-const showValue = computed(() => parser?.inner2Plant ? parser.inner2Plant(props.node) : props.node)
+const showValue = computed(() => parser?.value.inner2Plant ? parser.value.inner2Plant(props.node) : props.node)
 
 </script>
 <style scoped lang="scss">

@@ -22,6 +22,8 @@ import KMdEleSuperscript from './KMdEleSuperscript.vue';
 import KMdEleTable from './KMdEleTable.vue';
 import KMdEleTableRow from './KMdEleTableRow.vue';
 import KMdEleXml from './KMdEleXml.vue';
+import KMdEleLatexInline from './KMdEleLatexInline.vue';
+import KMdEleLatexBlock from './KMdEleLatexBlock.vue';
 
 export const components = {
   [defaultSymbol]: KMdEleDefault,
@@ -45,7 +47,9 @@ export const components = {
   superscript: KMdEleSuperscript,
   table: KMdEleTable,
   'table-row': KMdEleTableRow,
-  'xml': KMdEleXml
+  'xml': KMdEleXml,
+  'latex-inline': KMdEleLatexInline,
+  'latex-block': KMdEleLatexBlock,
 };
 
 export default function getComponent(node: string | KMarkdownNode) {

@@ -6,7 +6,7 @@
 </template>
 <script setup lang="ts">
 import { KMarkdownNode } from '@kuankuan/k-markdown-parser'
-import getComponentByType, { getNodeId } from './nodesEle/index.ts';
+import getComponentByType, { getNodeId } from './nodesEle/index';
 import KMdContent from './KMdContent.vue';
 import { computed } from 'vue';
 
