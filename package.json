@@ -4,7 +4,7 @@
   "private": false,
   "scripts": {
     "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint .",
     "format": "prettier --write src/",
     "build": "vite build"
   },
@@ -24,6 +24,7 @@
     "@vue/tsconfig": "^0.9.1",
     "eslint": "^10.2.0",
     "eslint-plugin-vue": "^10.8.0",
+    "jiti": "^2.6.1",
     "npm-run-all2": "^8.0.4",
     "prettier": "^3.8.2",
     "rollup-plugin-vue": "^6.0.0",
