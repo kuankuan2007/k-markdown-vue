@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import { computed, inject } from 'vue';
-import { parserSymbol } from '../symbles'
+import { parserSymbol } from '../symbols'
 
 const props = defineProps<{
     node: string

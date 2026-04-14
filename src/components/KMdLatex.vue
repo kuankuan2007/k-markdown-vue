@@ -9,7 +9,7 @@ import { inject, onMounted, useTemplateRef, watch } from 'vue';
 import type { KMarkdownVueOptions } from '../options';
 import katex, { type KatexOptions } from 'katex';
 import 'katex/dist/katex.css';
-import { optionSymbol } from '../symbles';
+import { optionSymbol } from '../symbols';
 
 const props = defineProps<{
     content: string,

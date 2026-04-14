@@ -127,7 +127,7 @@ src/
 ├── KMdContent.vue          # 内容包装器
 ├── KMdNode.vue             # 节点渲染器
 ├── options.ts              # 类型定义
-├── symbles.ts              # Vue provide/inject 符号
+├── symbols.ts              # Vue provide/inject 符号
 ├── components/             # 共享组件
 │   ├── KMdCode.vue         # 代码高亮
 │   └── KMdLatex.vue        # LaTeX 渲染

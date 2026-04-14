@@ -127,7 +127,7 @@ src/
 ├── KMdContent.vue          # Content wrapper
 ├── KMdNode.vue             # Node renderer
 ├── options.ts              # Type definitions
-├── symbles.ts              # Vue provide/inject symbols
+├── symbols.ts              # Vue provide/inject symbols
 ├── components/             # Shared components
 │   ├── KMdCode.vue         # Code highlighting
 │   └── KMdLatex.vue        # LaTeX rendering

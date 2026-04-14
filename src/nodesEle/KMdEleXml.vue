@@ -7,7 +7,7 @@
 </template>
 <script setup lang="ts">
 import type { KMarkdownXMLNode } from '@kuankuan/k-markdown-parser/nodes/core';
-import { optionSymbol } from '../symbles';
+import { optionSymbol } from '../symbols';
 import { computed, inject } from 'vue';
 
 defineProps<{

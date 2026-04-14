@@ -5,7 +5,7 @@ import KMdEleBold from './KMdEleBold.vue';
 import KMdEleLink from './KMdEleLink.vue';
 import KMdEleString from './KMdEleString.vue';
 import type { KMarkdownNode } from '@kuankuan/k-markdown-parser';
-import { defaultSymbol, stringSymbol } from '../symbles';
+import { defaultSymbol, stringSymbol } from '../symbols';
 import KMdEleCodeInline from './KMdEleCodeInline.vue';
 import KMdEleCodeBlock from './KMdEleCodeBlock.vue';
 import KMdEleQuoteBlock from './KMdEleQuoteBlock.vue';
