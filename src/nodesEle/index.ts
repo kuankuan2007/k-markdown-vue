@@ -47,7 +47,7 @@ export const components = {
   superscript: KMdEleSuperscript,
   table: KMdEleTable,
   'table-row': KMdEleTableRow,
-  'xml': KMdEleXml,
+  xml: KMdEleXml,
   'latex-inline': KMdEleLatexInline,
   'latex-block': KMdEleLatexBlock,
 };

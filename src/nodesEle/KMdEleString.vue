@@ -1,23 +1,23 @@
 <template>
-    <div class="k-md-ele-string">{{ showValue }}</div>
+  <div class="k-md-ele-string">{{ showValue }}</div>
 </template>
 <script setup lang="ts">
 import { computed, inject } from 'vue';
-import { parserSymbol } from '../symbols'
+import { parserSymbol } from '../symbols';
 
 const props = defineProps<{
-    node: string
-}>()
+  node: string;
+}>();
 
 const parser = inject(parserSymbol);
 
-
-const showValue = computed(() => parser?.value.inner2Plant ? parser.value.inner2Plant(props.node) : props.node)
-
+const showValue = computed(() =>
+  parser?.value.inner2Plant ? parser.value.inner2Plant(props.node) : props.node
+);
 </script>
 <style scoped lang="scss">
 .k-md-ele-string {
-    display: inline;
-    white-space: pre-wrap;
+  display: inline;
+  white-space: pre-wrap;
 }
 </style>
