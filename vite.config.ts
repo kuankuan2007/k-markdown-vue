@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: "src/index.ts",
+      entry: "src/KMarkdownVue.vue",
       name: 'KMarkdownVue',
       fileName: 'index',
       formats: ['es', 'cjs'],
