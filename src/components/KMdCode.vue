@@ -1,8 +1,8 @@
 <template>
-  <div class="k-md-cmp-code">
+  <div class="k-md-cmp-code" :class="{ 'k-md-cmp-code-inline': props.inline }">
     <pre v-if="!props.inline"><code v-html="res.value"></code></pre>
     <code v-else v-html="res.value"></code>
-    <div class="lang">{{ lang }}</div>
+    <div class="lang" v-if="!props.inline && lang">{{ lang }}</div>
   </div>
 </template>
 <script setup lang="ts">
@@ -23,4 +23,8 @@ const lang = computed(() => {
   return props.language || res.value.language;
 });
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.k-md-cmp-code-inline {
+  display: inline;
+}
+</style>

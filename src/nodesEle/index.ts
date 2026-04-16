@@ -24,6 +24,7 @@ import KMdEleTableRow from './KMdEleTableRow.vue';
 import KMdEleXml from './KMdEleXml.vue';
 import KMdEleLatexInline from './KMdEleLatexInline.vue';
 import KMdEleLatexBlock from './KMdEleLatexBlock.vue';
+import KMdEleImage from './KMdEleImage.vue';
 
 export const components = {
   [defaultSymbol]: KMdEleDefault,
@@ -50,6 +51,7 @@ export const components = {
   xml: KMdEleXml,
   'latex-inline': KMdEleLatexInline,
   'latex-block': KMdEleLatexBlock,
+  image: KMdEleImage,
 };
 
 export default function getComponent(node: string | KMarkdownNode) {
