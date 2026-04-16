@@ -1,7 +1,7 @@
-import type { ComponentsList } from "../options";
+import type { ComponentsList } from '../options';
 import { defaultSymbol, stringSymbol } from '../symbols';
-import type { KMarkdownNode } from "@kuankuan/k-markdown-parser";
-
+import type { KMarkdownNode } from '@kuankuan/k-markdown-parser';
+import defaultComponents from './default';
 export default function getComponent(node: string | KMarkdownNode, components: ComponentsList) {
   if (typeof node === 'string') {
     return components[stringSymbol];
@@ -16,3 +16,4 @@ export function getNodeId(node: string | KMarkdownNode) {
     return node.id;
   }
 }
+export { defaultComponents };

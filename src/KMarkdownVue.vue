@@ -6,7 +6,7 @@ import { KMarkdownParser ,type Option as parserOptions} from '@kuankuan/k-markdo
 import KMdNode from './KMdNode.vue';
 import { optionSymbol, parserSymbol } from './symbols';
 import type { KMarkdownVueOptions, KMarkdownVueParsedOptions } from './options';
-import { computed, markRaw, provide, readonly, watch, type ComputedRef } from 'vue';
+import { computed, markRaw, provide, readonly, type ComputedRef } from 'vue';
 import defaultComponents from './nodesEle/default';
 
 const props = defineProps<{ value: string; options?: KMarkdownVueOptions }>();
@@ -27,12 +27,5 @@ provide(parserSymbol, parser as ComputedRef<KMarkdownParser>);
 provide(optionSymbol, readonly(options) as ComputedRef<KMarkdownVueParsedOptions>);
 
 const obj = computed(() => parser.value.parse(props.value));
-watch(
-  obj,
-  (newVal) => {
-    console.log(newVal);
-  },
-  { immediate: true }
-);
 </script>
 <style scoped lang="scss"></style>

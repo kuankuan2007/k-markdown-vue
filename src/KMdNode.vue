@@ -15,7 +15,7 @@ const props = defineProps<{
 }>();
 const options = inject(optionSymbol);
 
-const is = computed(() => getComponent(props.node, options!.value.components));
+const is = computed(() => getComponent(props.node, options!.value.components!));
 const nodeId = computed(() => getNodeId(props.node));
 </script>
 <style scoped lang="scss"></style>
