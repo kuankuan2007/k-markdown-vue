@@ -5,15 +5,17 @@
 </template>
 <script setup lang="ts">
 import { KMarkdownNode } from '@kuankuan/k-markdown-parser';
-import getComponentByType, { getNodeId } from './nodesEle/index';
+import { optionSymbol } from './symbols';
+import getComponent, { getNodeId } from './nodesEle/index';
 import KMdContent from './KMdContent.vue';
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 
 const props = defineProps<{
   node: KMarkdownNode | string;
 }>();
+const options = inject(optionSymbol);
 
-const is = computed(() => getComponentByType(props.node));
+const is = computed(() => getComponent(props.node, options!.value.components));
 const nodeId = computed(() => getNodeId(props.node));
 </script>
 <style scoped lang="scss"></style>

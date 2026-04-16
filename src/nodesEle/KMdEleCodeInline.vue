@@ -1,10 +1,9 @@
 <template>
-  <k-md-code :content="node.content.join(' ')" :inline="true"></k-md-code>
+  <code>{{ node.content.join(' ') }}</code>
 </template>
 <script setup lang="ts">
 import type { KMarkdownCodeInlineNode } from '@kuankuan/k-markdown-parser/nodes/core';
 
-import KMdCode from '../components/KMdCode.vue';
 defineProps<{
   node: KMarkdownCodeInlineNode;
 }>();

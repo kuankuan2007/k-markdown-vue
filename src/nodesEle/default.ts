@@ -1,0 +1,56 @@
+import KMdEleDefault from './KMdEleDefault.vue';
+import KMdEleTitle from './KMdEleTitle.vue';
+import KMdEleParagraph from './KMdEleParagraph.vue';
+import KMdEleBold from './KMdEleBold.vue';
+import KMdEleLink from './KMdEleLink.vue';
+import KMdEleString from './KMdEleString.vue';
+import { defaultSymbol, stringSymbol } from '../symbols';
+import KMdEleCodeInline from './KMdEleCodeInline.vue';
+import KMdEleCodeBlock from './KMdEleCodeBlock.vue';
+import KMdEleQuoteBlock from './KMdEleQuoteBlock.vue';
+import KMdEleUnorderedListItem from './KMdEleUnorderedListItem.vue';
+import KMdEleUnorderedList from './KMdEleUnorderedList.vue';
+import KMdEleOrderedList from './KMdEleOrderedList.vue';
+import KMdEleOrderedListItem from './KMdEleOrderedListItem.vue';
+import KMdEleLineBetween from './KMdEleLineBetween.vue';
+import KMdEleItalic from './KMdEleItalic.vue';
+import KMdEleEmail from './KMdEleEmail.vue';
+import KMdEleDeleteLine from './KMdEleDeleteLine.vue';
+import KMdEleSubscript from './KMdEleSubscript.vue';
+import KMdEleSuperscript from './KMdEleSuperscript.vue';
+import KMdEleTable from './KMdEleTable.vue';
+import KMdEleTableRow from './KMdEleTableRow.vue';
+import KMdEleXml from './KMdEleXml.vue';
+import KMdEleLatexInline from './KMdEleLatexInline.vue';
+import KMdEleLatexBlock from './KMdEleLatexBlock.vue';
+import KMdEleImage from './KMdEleImage.vue';
+import type { ComponentsList } from '@/options';
+
+const defaultComponents: ComponentsList = {
+  [defaultSymbol]: KMdEleDefault,
+  [stringSymbol]: KMdEleString,
+  paragraph: KMdEleParagraph,
+  title: KMdEleTitle,
+  bold: KMdEleBold,
+  italic: KMdEleItalic,
+  link: KMdEleLink,
+  email: KMdEleEmail,
+  'code-inline': KMdEleCodeInline,
+  'code-block': KMdEleCodeBlock,
+  'quote-block': KMdEleQuoteBlock,
+  'unordered-list-item': KMdEleUnorderedListItem,
+  'unordered-list': KMdEleUnorderedList,
+  'ordered-list-item': KMdEleOrderedListItem,
+  'ordered-list': KMdEleOrderedList,
+  'line-between': KMdEleLineBetween,
+  'delete-line': KMdEleDeleteLine,
+  subscript: KMdEleSubscript,
+  superscript: KMdEleSuperscript,
+  table: KMdEleTable,
+  'table-row': KMdEleTableRow,
+  xml: KMdEleXml,
+  'latex-inline': KMdEleLatexInline,
+  'latex-block': KMdEleLatexBlock,
+  image: KMdEleImage,
+};
+export default defaultComponents;
