@@ -1,153 +1,161 @@
-# @kuankuan2007/k-markdown-vue
+# @kuankuan/k-markdown-vue
 
-A Vue 3 component library for rendering Markdown content with support for LaTeX math expressions, syntax highlighting, and customizable rendering.
+[![npm version](https://img.shields.io/npm/v/@kuankuan/k-markdown-vue)](https://www.npmjs.com/package/@kuankuan/k-markdown-vue)
+[![license](https://img.shields.io/badge/license-MulanPSL--2.0-blue)](./LICENSE)
+[![GitHub](https://img.shields.io/badge/GitHub-black?logo=github)](https://github.com/kuankuan2007/k-markdown-vue)
+
+A Vue 3 component for rendering Markdown through an AST produced by
+[@kuankuan/k-markdown-parser](https://github.com/kuankuan2007/k-markdown-parser), with built-in
+KaTeX (LaTeX) and highlight.js (code highlighting).
 
 ## Features
 
-- 🚀 **Vue 3 Support**: Built with Vue 3 and TypeScript for modern Vue applications
-- 📝 **Markdown Parsing**: Powered by [@kuankuan/k-markdown-parser](https://github.com/kuankuan2007/k-markdown-parser)
-- 🔢 **LaTeX Math**: Built-in support for mathematical expressions using KaTeX
-- 💻 **Syntax Highlighting**: Code syntax highlighting with highlight.js
-- 🎨 **Customizable**: Flexible options for parsing and rendering
-- 📦 **Lightweight**: Minimal dependencies, optimized for performance
+- Vue 3 + TypeScript
+- Fast Markdown parsing via `@kuankuan/k-markdown-parser`
+- LaTeX rendering via KaTeX (opt-in)
+- Code highlighting via highlight.js
+- Safe-by-default XML handling (default: `warn`)
+- Custom renderers per node type
 
 ## Installation
 
 ```bash
-npm install @kuankuan/k-markdown-vue
+npm i @kuankuan/k-markdown-vue
 ```
 
-Or using yarn:
-
-```bash
-yarn add @kuankuan/k-markdown-vue
-```
-
-Or using pnpm:
-
-```bash
-pnpm add @kuankuan/k-markdown-vue
-```
-
-## Usage
-
-### Basic Usage
+## Quick Start
 
 ```vue
 <template>
-  <k-markdown-vue :value="markdownContent" />
+  <KMarkdownVue :value="md" :options="options" />
 </template>
 
 <script setup lang="ts">
-import { KMarkdownVue } from '@kuankuan/k-markdown-vue/src';
-import markdownContent from './markdown-content.md?raw';
-</script>
-```
+import { ref } from 'vue';
+import KMarkdownVue from '@kuankuan/k-markdown-vue';
 
-### With Options
+// Library styles (contains KaTeX CSS extracted from the bundle)
+import '@kuankuan/k-markdown-vue/dist/index.css';
 
-```vue
-<template>
-  <KMarkdownVue :value="markdownContent" :options="options" />
-</template>
+// Pick ONE highlight.js theme you like
+import 'highlight.js/styles/monokai-sublime.css';
 
-<script setup lang="ts">
-import { KMarkdownVue } from '@kuankuan/k-markdown-vue';
-import type { KMarkdownVueOptions } from '@kuankuan/k-markdown-vue';
+const md = ref(`# Hello\n\nInline math: $a^2+b^2=c^2$\n\n\`\`\`ts\nconst x: number = 1\n\`\`\``);
 
-const options: KMarkdownVueOptions = {
-  parserOptions: {
-    // Parser configuration options
-  },
-  latex: {
-    // KaTeX options
-    throwOnError: false,
-    displayMode: false,
-  },
-  xml: 'preserve', // 'ignore' | 'warn' | 'preserve' | custom function
+const options = {
+  latex: 'default',
+  xml: 'warn',
 };
-
-const markdownContent = '# Your markdown content here';
 </script>
 ```
 
-## Options
+Optional (repo style suggestion): this repo also contains `styles/suggestion.scss` which includes a
+highlight.js theme + a few Markdown-friendly styles (requires Sass in your build).
+
+## API
+
+### Component
+
+Default export: `KMarkdownVue`.
+
+Props:
+
+- `value: string` — Markdown source text
+- `options?: KMarkdownVueOptions` — rendering / parsing options
 
 ### KMarkdownVueOptions
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `parserOptions` | `KMarkdownParserOptions` | `undefined` | Configuration options for the markdown parser |
-| `latex` | `'ignore' \| 'warn' \| 'default' \| KatexOptions` | `'default'` | LaTeX rendering behavior and KaTeX configuration |
-| `xml` | `'ignore' \| 'warn' \| 'preserve' \| Function` | `'preserve'` | XML node handling strategy |
+| Option | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `parserOptions` | `@kuankuan/k-markdown-parser` `Option` | `undefined` | Passed to `new KMarkdownParser(parserOptions)` |
+| `latex` | `'ignore' \| 'warn' \| 'default' \| KatexOptions` | `undefined` | `undefined` behaves like “render nothing” for LaTeX nodes |
+| `xml` | `'ignore' \| 'warn' \| 'preserve' \| (node) => VNode \| void` | `'warn'` | Default is applied inside the XML renderer |
+| `components` | `Record<string \| symbol, Component>` | built-in defaults | Override renderers by node id |
 
-### LaTeX Options
+Type-only imports (when your package includes `src/`):
 
-- **`'ignore'`**: Skip LaTeX rendering
-- **`'warn'`**: Log warnings for LaTeX expressions
-- **`'default'`**: Use default KaTeX rendering
-- **`KatexOptions`**: Custom KaTeX configuration object
+```ts
+import type { KMarkdownVueOptions } from '@kuankuan/k-markdown-vue/src/options';
+import { defaultSymbol, stringSymbol } from '@kuankuan/k-markdown-vue/src/symbols';
+```
 
-### XML Options
+Notes:
 
-- **`'ignore'`**: Ignore XML nodes
-- **`'warn'`**: Log warnings for XML nodes
-- **`'preserve'`**: Render XML nodes as-is
-- **`Function`**: Custom render function for XML nodes
+- **`latex`**
+  - `'default'` renders with KaTeX and default `{ throwOnError: false }`.
+  - `KatexOptions` lets you pass KaTeX options (merged).
+  - `'warn'` shows `"<LaTeX is not allowed>"`.
+  - `'ignore'` (and `undefined`) renders nothing for LaTeX nodes.
+
+- **`xml`**
+  - `'warn'` shows `"<XML is not allowed>"`.
+  - `'preserve'` renders as `<node.args.name v-bind="node.args.attributes">...</node.args.name>`.
+  - `function` receives the `KMarkdownXMLNode` and can return a `VNode` (or return nothing).
+
+Security: if your Markdown is untrusted, avoid `xml: 'preserve'`.
+
+## Node Renderers
+
+This library renders the AST nodes produced by `@kuankuan/k-markdown-parser`.
+
+- If a node id has a matching renderer in `options.components`, that component is used.
+- Otherwise it falls back to a default wrapper (keyed by `defaultSymbol`).
+- Plain string segments are rendered by the renderer keyed by `stringSymbol`.
+
+Built-in renderer ids (provided by default):
+
+`title`, `paragraph`, `quote-block`, `code-block`, `code-inline`, `latex-block`, `latex-inline`,
+`line-between`, `bold`, `italic`, `delete-line`, `subscript`, `superscript`, `image`, `link`,
+`email`, `unordered-list`, `unordered-list-item`, `ordered-list`, `ordered-list-item`, `table`,
+`table-row`, `xml`.
+
+The parser also supports other node types (e.g. `emoji`, `task-list`, `table-cell`). If you enable
+those syntaxes, consider providing corresponding components via `options.components`.
+
+### Custom Components
+
+You can override any node renderer by id:
+
+```ts
+import type { Component } from 'vue';
+import type { KMarkdownNode } from '@kuankuan/k-markdown-parser';
+
+const MyCodeBlock: Component<{ node: KMarkdownNode }> = {
+  /* ... */
+};
+
+const options = {
+  components: {
+    'code-block': MyCodeBlock,
+  },
+};
+```
+
+Tip: `defaultSymbol` and `stringSymbol` live in `src/symbols.ts` in this repo and can be used as
+special keys to override the fallback renderer and plain-text renderer.
+
+## Parser Options
+
+`parserOptions` is the same `Option` type accepted by `@kuankuan/k-markdown-parser`.
+You can customize syntaxes (`syntaxes`), node mapping (`nodeMap`), and more. See the parser docs:
+<https://github.com/kuankuan2007/k-markdown-parser>
 
 ## Development
 
-### Setup
-
 ```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Build library
+npm i
 npm run build
-
-# Type check
 npm run type-check
-
-# Lint
 npm run lint
-
-# Format code
 npm run format
 ```
 
-### Project Structure
+Build output:
 
-```plaintext
-src/
-├── KMarkdownVue.vue        # Main component
-├── KMdContent.vue          # Content wrapper
-├── KMdNode.vue             # Node renderer
-├── options.ts              # Type definitions
-├── symbols.ts              # Vue provide/inject symbols
-├── components/             # Shared components
-│   ├── KMdCode.vue         # Code highlighting
-│   └── KMdLatex.vue        # LaTeX rendering
-└── nodesEle/               # Element-specific components
-    ├── index.ts
-    ├── KMdEleBold.vue
-    ├── KMdEleCodeBlock.vue
-    ├── KMdEleLatexBlock.vue
-    └── ...                 # Other element components
-```
-
-## Dependencies
-
-- **Vue 3**: Core framework
-- **[@kuankuan/k-markdown-parser](https://github.com/kuankuan2007/k-markdown-parser)**: Markdown parsing engine
-- **KaTeX**: LaTeX math rendering
-- **highlight.js**: Syntax highlighting for code blocks
+- `dist/index.mjs` (ESM)
+- `dist/index.js` (CJS)
+- `dist/index.css`
 
 ## License
 
-This project is licensed under the Mulan Permissive Software License, Version 2 (MulanPSL-2.0).
-
-See [LICENSE](./LICENSE) for details.
+Mulan Permissive Software License, Version 2 (MulanPSL-2.0). See [LICENSE](./LICENSE).
