@@ -1,27 +1,36 @@
 <template>
   <div class="k-md-ele-code-block">
-    <pre><code v-html="res.value"></code></pre>
+    <k-md-support-highlight
+      :node="props.node"
+      :options="highlightOptions"
+      @resolved-lang="resolvedLang = $event"
+    ></k-md-support-highlight>
     <slot name="assistant" :lang="lang" :code="content" :node="props.node"
       ><div class="lang">{{ lang }}</div></slot
     >
   </div>
 </template>
 <script setup lang="ts">
+import type { HighlightOptions } from '../options';
+import KMdSupportHighlight from '../supports/highlight/KMdSupportHighlight.vue';
 import type { KMarkdownCodeBlockNode } from '@kuankuan/k-markdown-parser/nodes/core';
-import hljs from 'highlight.js';
-import { computed } from 'vue';
+import { optionSymbol } from '../symbols';
+import { computed, inject, ref } from 'vue';
 
 const props = defineProps<{
   node: KMarkdownCodeBlockNode;
 }>();
+const options = inject(optionSymbol);
+const resolvedLang = ref<string | undefined>(props.node.args.language);
+
 const content = computed(() => props.node.content.join('\n'));
-const res = computed(() => {
-  return props.node.args.language
-    ? hljs.highlight(content.value, { language: props.node.args.language, ignoreIllegals: true })
-    : hljs.highlightAuto(content.value);
+
+const highlightOptions = computed<HighlightOptions>(() => {
+  return options?.value.highlight ?? true;
 });
+
 const lang = computed(() => {
-  return props.node.args.language || res.value.language;
+  return resolvedLang.value;
 });
 </script>
 <style scoped lang="scss"></style>

@@ -24,7 +24,7 @@ import KMdEleXml from './KMdEleXml.vue';
 import KMdEleLatexInline from './KMdEleLatexInline.vue';
 import KMdEleLatexBlock from './KMdEleLatexBlock.vue';
 import KMdEleImage from './KMdEleImage.vue';
-import type { ComponentsList } from '@/options';
+import type { ComponentsList } from '../options';
 
 const defaultComponents: ComponentsList = {
   [defaultSymbol]: KMdEleDefault,

@@ -1,19 +1,11 @@
 <template>
-  <div class="k-md-node-xml-warn" v-if="xmlOptions === 'warn'">&lt;XML is not allowed&gt;</div>
-  <component
-    v-else-if="xmlOptions === 'preserve'"
-    :is="node.args.name"
-    v-bind="node.args.attributes"
-  >
-    <slot />
-  </component>
-  <component v-else-if="typeof xmlOptions === 'function'" :is="xmlOptions(node) || 'div'" />
+  <k-md-support-xml :node="node" :options="xmlOptions"></k-md-support-xml>
 </template>
 <script setup lang="ts">
 import type { KMarkdownXMLNode } from '@kuankuan/k-markdown-parser/nodes/core';
 import { optionSymbol } from '../symbols';
 import { computed, inject } from 'vue';
-
+import KMdSupportXml from '../supports/KMdSupportXml.vue';
 defineProps<{
   node: KMarkdownXMLNode;
 }>();
