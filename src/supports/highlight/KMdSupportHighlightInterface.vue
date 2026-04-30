@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
-import type { HighlightInterface } from "./index";
+import type { HighlighterInfo, HighlightInterface } from "./index";
 
 const props = defineProps<{
   content: string;
@@ -12,15 +12,15 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: "resolved", result: { html: string; lang?: string }): void;
+  (e: "resolve-info", info: HighlighterInfo): void;
 }>();
 
 const res = computed(() =>
-  props.hilightInterface.highlight({ code: props.content, lang: props.lang })
+  props.hilightInterface.highlight({ code: props.content, preferLang: props.lang })
 );
 
 watchEffect(() => {
-  emits("resolved", res.value);
+  emits("resolve-info", res.value.info);
 });
 
 defineExpose({

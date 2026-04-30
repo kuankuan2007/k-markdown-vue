@@ -7,7 +7,7 @@
         :content="node.content.join('\n')"
         :hilightInterface="defaultHighlighter"
         :lang="node.args.language"
-        @resolved="handleResolved"
+        @resolve-info="handleResolveInfo"
       ></k-md-support-highlight-interface
     ></template
     ><k-md-support-highlight-interface
@@ -15,7 +15,7 @@
       :content="node.content.join('\n')"
       :hilightInterface="options"
       :lang="node.args.language"
-      @resolved="handleResolved"></k-md-support-highlight-interface
+      @resolve-info="handleResolveInfo"></k-md-support-highlight-interface
   ></pre>
 </template>
 <script setup lang="ts">
@@ -23,20 +23,20 @@ import type { HighlightOptions } from '../../options';
 import type { KMarkdownCodeBlockNode } from '@kuankuan/k-markdown-parser/nodes/core';
 import { shallowRef, watchEffect } from 'vue';
 import KMdSupportHighlightInterface from './KMdSupportHighlightInterface.vue';
-import { getDefaultHighlighter, type HighlightInterface } from '.';
+import { getDefaultHighlighter, type HighlighterInfo, type HighlightInterface } from '.';
 
 const props = defineProps<{
   node: KMarkdownCodeBlockNode;
   options: HighlightOptions;
 }>();
 const emits = defineEmits<{
-  (e: 'resolved-lang', lang?: string): void;
+  (e: 'resolve-info', info: HighlighterInfo): void;
 }>();
 
 const defaultHighlighter = shallowRef<HighlightInterface | null>(null);
 
-function handleResolved(result: { html: string; lang?: string }) {
-  emits('resolved-lang', result.lang || props.node.args.language);
+function handleResolveInfo(info: HighlighterInfo) {
+  emits('resolve-info', info);
 }
 
 watchEffect(() => {
