@@ -2,8 +2,8 @@
   <code v-html="res.html"></code>
 </template>
 <script setup lang="ts">
-import { computed, watchEffect } from 'vue';
-import type { HighlightInterface } from './index';
+import { computed, watchEffect } from "vue";
+import type { HighlightInterface } from "./index";
 
 const props = defineProps<{
   content: string;
@@ -12,7 +12,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (e: 'resolved', result: { html: string; lang?: string }): void;
+  (e: "resolved", result: { html: string; lang?: string }): void;
 }>();
 
 const res = computed(() =>
@@ -20,8 +20,7 @@ const res = computed(() =>
 );
 
 watchEffect(() => {
-  emits('resolved', res.value);
-  console.log(res.value.html);
+  emits("resolved", res.value);
 });
 
 defineExpose({
