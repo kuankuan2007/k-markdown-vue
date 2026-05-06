@@ -1,10 +1,12 @@
 <template>
   <div class="k-md-ele-code-block">
-    <k-md-support-highlight
-      :node="props.node"
-      :options="highlightOptions"
-      @resolve-info="handleResolveInfo"
-    ></k-md-support-highlight>
+    <div class="k-md-ele-code-block-inner">
+      <k-md-support-highlight
+        :node="props.node"
+        :options="highlightOptions"
+        @resolve-info="handleResolveInfo"
+      ></k-md-support-highlight>
+    </div>
     <slot name="assistant" :info="info" :code="content" :node="props.node"
       ><div class="lang">{{ lang }}</div></slot
     >

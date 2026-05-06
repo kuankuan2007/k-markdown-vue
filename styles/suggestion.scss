@@ -10,7 +10,9 @@ code {
   border-radius: 0.5em;
   position: relative;
   overflow: hidden;
-
+  .k-md-ele-code-block-inner {
+    overflow-y: auto;
+  }
   .lang {
     font-size: 0.6em;
     position: absolute;
@@ -41,7 +43,7 @@ blockquote {
   }
 }
 @function repeat-string($str, $num) {
-  $result: "";
+  $result: '';
   @for $i from 1 through $num {
     $result: $result + $str;
   }
@@ -50,16 +52,16 @@ blockquote {
 @for $i from 1 through 6 {
   h#{$i} {
     &::before {
-      content: repeat-string("#", $i) + " ";
+      content: repeat-string('#', $i) + ' ';
       opacity: 0.5;
       -webkit-user-select: none;
       user-select: none;
     }
   }
 }
-table{
+table {
   border-collapse: collapse;
-  td{
+  td {
     border: 1px solid rgba(white, 0.5);
   }
 }
