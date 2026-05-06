@@ -1,6 +1,6 @@
 {
   "name": "@kuankuan/k-markdown-vue",
-  "version": "0.1.7-post1",
+  "version": "0.1.8",
   "private": false,
   "scripts": {
     "type-check": "vue-tsc --noEmit -p tsconfig.json --composite false",
