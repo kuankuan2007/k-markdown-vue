@@ -21,10 +21,17 @@ import type { HighlighterInfo } from "../supports/highlight";
 const props = defineProps<{
   node: KMarkdownCodeBlockNode;
 }>();
+
+const emits = defineEmits<{
+  (e: "resolve-info", info: HighlighterInfo): void;
+}>();
+
 const options = inject(optionSymbol);
-const info = ref<HighlighterInfo | undefined>(undefined);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const info = ref<(HighlighterInfo & { [key: string]: any }) | undefined>(undefined);
 function handleResolveInfo(newInfo: HighlighterInfo) {
   info.value = newInfo;
+  emits("resolve-info", newInfo);
 }
 
 const resolvedLang = ref<string | undefined>(props.node.args.language);

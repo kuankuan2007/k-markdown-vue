@@ -1,10 +1,14 @@
-export abstract class HighlightInterface {
-  abstract highlight(options: { code: string; preferLang?: string }): {
-    html: string;
-    info: HighlighterInfo;
-  };
+export abstract class HighlightInterface<ResultInfo extends HighlighterInfo=HighlighterInfo> {
+  abstract highlight(options: {
+    code: string;
+    preferLang?: string;
+  }): HighlighterResult<ResultInfo> | Promise<HighlighterResult<ResultInfo>>;
 }
 
+export type HighlighterResult<Info extends HighlighterInfo = HighlighterInfo> = {
+  html: string;
+  info: Info;
+};
 export type HighlighterInfo = {
   langSupported: boolean;
   usingLang?: string;
