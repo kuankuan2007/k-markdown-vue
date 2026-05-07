@@ -2,8 +2,9 @@
   <div class="k-md-ele-string">{{ showValue }}</div>
 </template>
 <script setup lang="ts">
-import { computed, inject } from 'vue';
-import { parserSymbol } from '../symbols';
+import { computed, inject } from "vue";
+import { parserSymbol } from "../symbols";
+import { toPlant } from "../supports/textConverter";
 
 const props = defineProps<{
   node: string;
@@ -11,9 +12,7 @@ const props = defineProps<{
 
 const parser = inject(parserSymbol);
 
-const showValue = computed(() =>
-  parser?.value.inner2Plant ? parser.value.inner2Plant(props.node) : props.node
-);
+const showValue = computed(() => toPlant(props.node, parser?.value));
 </script>
 <style scoped lang="scss">
 .k-md-ele-string {

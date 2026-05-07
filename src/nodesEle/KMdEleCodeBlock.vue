@@ -16,9 +16,10 @@
 import type { HighlightOptions } from "../options";
 import KMdSupportHighlight from "../supports/highlight/KMdSupportHighlight.vue";
 import type { KMarkdownCodeBlockNode } from "@kuankuan/k-markdown-parser/nodes/core";
-import { optionSymbol } from "../symbols";
+import { optionSymbol, parserSymbol } from "../symbols";
 import { computed, inject, ref } from "vue";
 import type { HighlighterInfo } from "../supports/highlight";
+import { toPlant } from "../supports/textConverter";
 
 const props = defineProps<{
   node: KMarkdownCodeBlockNode;
@@ -38,7 +39,8 @@ function handleResolveInfo(newInfo: HighlighterInfo) {
 
 const resolvedLang = ref<string | undefined>(props.node.args.language);
 
-const content = computed(() => props.node.content.join("\n"));
+const parser = inject(parserSymbol);
+const content = computed(() => toPlant(props.node.content.join("\n"), parser?.value));
 
 const highlightOptions = computed<HighlightOptions>(() => {
   return options?.value.highlight ?? true;

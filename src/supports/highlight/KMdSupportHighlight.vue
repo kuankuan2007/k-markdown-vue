@@ -1,10 +1,10 @@
 <template>
-  <pre><code v-if="options === false">{{ node.content.join('\n') }}</code
+  <pre><code v-if="options === false">{{ contentShow }}</code
     ><template v-else-if="options === true"
-      ><code v-if="!defaultHighlighter">{{ node.content.join('\n') }}</code
+      ><code v-if="!defaultHighlighter">{{ contentShow }}</code
       ><k-md-support-highlight-interface
         v-else
-        :content="node.content.join('\n')"
+        :content="contentShow"
         :hilightInterface="defaultHighlighter"
         :lang="node.args.language"
         @resolve-info="handleResolveInfo"
@@ -12,7 +12,7 @@
     ></template
     ><k-md-support-highlight-interface
       v-else
-      :content="node.content.join('\n')"
+      :content="contentShow"
       :hilightInterface="options"
       :lang="node.args.language"
       @resolve-info="handleResolveInfo"></k-md-support-highlight-interface
@@ -21,9 +21,11 @@
 <script setup lang="ts">
 import type { HighlightOptions } from '../../options';
 import type { KMarkdownCodeBlockNode } from '@kuankuan/k-markdown-parser/nodes/core';
-import { shallowRef, watchEffect } from 'vue';
+import { computed, inject, shallowRef, watchEffect } from 'vue';
 import KMdSupportHighlightInterface from './KMdSupportHighlightInterface.vue';
 import { getDefaultHighlighter, type HighlighterInfo, type HighlightInterface } from '.';
+import { parserSymbol } from '../../symbols';
+import { toPlant } from '../textConverter';
 
 const props = defineProps<{
   node: KMarkdownCodeBlockNode;
@@ -32,6 +34,9 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'resolve-info', info: HighlighterInfo): void;
 }>();
+
+const parser = inject(parserSymbol);
+const contentShow = computed(() => toPlant(props.node.content.join("\n"), parser?.value));
 
 const defaultHighlighter = shallowRef<HighlightInterface | null>(null);
 
