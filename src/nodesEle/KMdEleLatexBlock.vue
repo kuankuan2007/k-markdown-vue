@@ -1,15 +1,28 @@
 <template>
   <div class="k-md-ele-latex-block">
-    <k-md-latex :content="node.content.join('\n')" :inline="false"></k-md-latex>
+    <k-md-support-latex
+      :content="showValue"
+      :inline="false"
+      :options="options?.latex ?? defaultLatexOptions"
+    ></k-md-support-latex>
   </div>
 </template>
 <script setup lang="ts">
-import type { KMarkdownLatexBlockNode } from '@kuankuan/k-markdown-parser/nodes/core';
+import type { KMarkdownLatexBlockNode } from "@kuankuan/k-markdown-parser/nodes/core";
 
-import KMdLatex from '../components/KMdLatex.vue';
+import KMdSupportLatex from "../supports/KMdSupportLatex.vue";
+import { computed, inject } from "vue";
+import { optionSymbol, parserSymbol } from "../symbols";
+import { defaultLatexOptions } from "../options";
+import { toPlant } from "../supports/textConverter";
 
-defineProps<{
+const options = inject(optionSymbol);
+
+const props = defineProps<{
   node: KMarkdownLatexBlockNode;
 }>();
+
+const parser = inject(parserSymbol);
+const showValue = computed(() => toPlant(props.node.content.join(" "), parser?.value));
 </script>
 <style scoped lang="scss"></style>

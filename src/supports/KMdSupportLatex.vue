@@ -2,41 +2,39 @@
   <div class="k-markdown-cmp-latex">
     <div
       class="content"
-      v-if="typeof options?.latex === 'object' || options?.latex === 'default'"
+      v-if="typeof options === 'object' || options === 'show'"
       ref="contentDom"
     ></div>
-    <div class="warn" v-else-if="options?.latex === 'warn'">&lt;LaTeX is not allowed&gt;</div>
+    <div class="warn" v-else-if="options === 'warn'">&lt;LaTeX is not allowed&gt;</div>
   </div>
 </template>
 <script setup lang="ts">
-import { inject, onMounted, useTemplateRef, watch } from 'vue';
-import type { KMarkdownVueOptions } from '../options';
+import { onMounted, useTemplateRef, watch } from 'vue';
+import { type LatexOptions } from '../options';
 import katex, { type KatexOptions } from 'katex';
 import 'katex/dist/katex.css';
-import { optionSymbol } from '../symbols';
 
 const props = defineProps<{
   content: string;
-
   inline: boolean;
+  options: LatexOptions;
 }>();
 const contentDom = useTemplateRef('contentDom');
 onMounted(() => {
   watch(
-    () => [props.content, options?.value.latex, props.inline, contentDom.value],
-    () => {
-      if (options?.value.latex === 'ignore' || options?.value.latex === 'warn') return;
-      if (!contentDom.value) return;
-      render(props.content, options?.value.latex, props.inline, contentDom.value);
+    () => [props, contentDom.value] as const,
+    ([props, dom]) => {
+      if (props.options === 'ignore' || props.options === 'warn') return;
+      if (!dom) return;
+      render(props.content, props.options, props.inline, dom);
     },
     { immediate: true, deep: true }
   );
 });
-const options = inject(optionSymbol);
 
 function render(
   content: string,
-  options: KMarkdownVueOptions['latex'],
+  options: 'show' | KatexOptions,
   inline: boolean = false,
   dom: HTMLElement
 ) {

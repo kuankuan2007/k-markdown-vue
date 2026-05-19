@@ -5,25 +5,16 @@
 import { KMarkdownParser, type Option as parserOptions } from '@kuankuan/k-markdown-parser';
 import KMdNode from './KMdNode.vue';
 import { optionSymbol, parserSymbol } from './symbols';
-import type { KMarkdownVueOptions, KMarkdownVueParsedOptions } from './options';
-import { computed, markRaw, provide, readonly, type ComputedRef } from 'vue';
-import defaultComponents from './nodesEle/default';
+import {
+  computedParseOptions,
+  type KMarkdownVueOptions,
+  type KMarkdownVueParsedOptions,
+} from './options';
+import { computed, provide, readonly, type ComputedRef } from 'vue';
 
 const props = defineProps<{ value: string; options?: KMarkdownVueOptions }>();
 
-const options = computed<KMarkdownVueParsedOptions>(() => {
-  const merged = Object.assign({}, { components: defaultComponents }, props.options);
-  if (merged.components) {
-    merged.components = Object.fromEntries(
-      [
-        ...Object.getOwnPropertyNames(merged.components),
-        ...Object.getOwnPropertySymbols(merged.components),
-      ].map((k) => [k, markRaw(merged.components![k as keyof typeof merged.components])])
-    ) as typeof merged.components;
-  }
-  return merged;
-});
-
+const options = computedParseOptions(props.options);
 const parser = computed(() => new KMarkdownParser(options.value.parserOptions as parserOptions));
 
 provide(parserSymbol, parser as ComputedRef<KMarkdownParser>);
