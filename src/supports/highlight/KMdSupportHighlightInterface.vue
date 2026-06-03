@@ -31,8 +31,9 @@ watch(
           console.error(err);
         }
       );
+    } else {
+      res.value = result as HighlighterResult;
     }
-    return result;
   },
   { immediate: true, deep: true }
 );
