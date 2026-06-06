@@ -23,6 +23,7 @@ export default defineConfig({
       name: 'rewrite-imports',
       generateBundle(options, bundle) {
         for (const [fileName, chunk] of Object.entries(bundle)) {
+          void fileName;
           if (chunk.type === 'chunk') {
             if (options.format === 'es') {
               chunk.code = chunk.code.replace(/(from\s+['"]\.[^'"]+?)\.(vue|ts)(['"])/g, '$1.mjs$3');
