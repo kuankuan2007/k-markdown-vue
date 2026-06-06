@@ -4,23 +4,25 @@
 [![license](https://img.shields.io/badge/license-MulanPSL--2.0-blue)](./LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-black?logo=github)](https://github.com/kuankuan2007/k-markdown-vue)
 
-A Vue 3 component for rendering Markdown through an AST produced by
-[@kuankuan/k-markdown-parser](https://github.com/kuankuan2007/k-markdown-parser), with built-in
-KaTeX (LaTeX) and highlight.js (code highlighting).
+A Vue 3 Markdown renderer built on top of `@kuankuan/k-markdown-parser`.
 
 ## Features
 
 - Vue 3 + TypeScript
-- Fast Markdown parsing via `@kuankuan/k-markdown-parser`
-- LaTeX rendering via KaTeX (opt-in)
-- Code highlighting via highlight.js
-- Safe-by-default XML handling (default: `warn`)
-- Custom renderers per node type
+- AST-based rendering instead of raw HTML string concatenation
+- Custom renderers per node id
+- Optional LaTeX, XML and code highlighting strategies
 
 ## Installation
 
 ```bash
 npm i @kuankuan/k-markdown-vue
+```
+
+Install `highlight.js` as well if you want to use the default highlighter:
+
+```bash
+npm i highlight.js
 ```
 
 ## Quick Start
@@ -34,128 +36,54 @@ npm i @kuankuan/k-markdown-vue
 import { ref } from 'vue';
 import KMarkdownVue from '@kuankuan/k-markdown-vue';
 
-// Library styles (contains KaTeX CSS extracted from the bundle)
 import '@kuankuan/k-markdown-vue/dist/index.css';
-
-// Pick ONE highlight.js theme you like
 import 'highlight.js/styles/monokai-sublime.css';
 
-const md = ref(`# Hello\n\nInline math: $a^2+b^2=c^2$\n\n\`\`\`ts\nconst x: number = 1\n\`\`\``);
+const md = ref(`# Hello\n\n$a^2+b^2=c^2$\n\n\`\`\`ts\nconst answer = 42;\n\`\`\``);
 
 const options = {
-  latex: 'default',
+  latex: 'show',
   xml: 'warn',
+  highlight: true,
 };
 </script>
 ```
 
-Optional (repo style suggestion): this repo also contains `styles/suggestion.scss` which includes a
-highlight.js theme + a few Markdown-friendly styles (requires Sass in your build).
+## Component API
 
-## API
-
-### Component
-
-Default export: `KMarkdownVue`.
+Default export: `KMarkdownVue`
 
 Props:
 
-- `value: string` — Markdown source text
-- `options?: KMarkdownVueOptions` — rendering / parsing options
+- `value: string`
+- `options?: KMarkdownVueOptions`
 
-### KMarkdownVueOptions
+## `KMarkdownVueOptions`
 
 | Option | Type | Default | Notes |
 | --- | --- | --- | --- |
-| `parserOptions` | `@kuankuan/k-markdown-parser` `Option` | `undefined` | Passed to `new KMarkdownParser(parserOptions)` |
-| `latex` | `'ignore' \| 'warn' \| 'default' \| KatexOptions` | `undefined` | `undefined` behaves like “render nothing” for LaTeX nodes |
-| `xml` | `'ignore' \| 'warn' \| 'preserve' \| (node) => VNode \| void` | `'warn'` | Default is applied inside the XML renderer |
-| `components` | `Record<string \| symbol, Component>` | built-in defaults | Override renderers by node id |
+| `parserOptions` | parser `Option` | `undefined` | Passed to `new KMarkdownParser(parserOptions)` |
+| `xml` | `'ignore' \| 'warn' \| 'show' \| ((node) => VNode \| void)` | `'warn'` | Controls XML nodes |
+| `latex` | `'ignore' \| 'warn' \| 'show' \| KatexOptions` | `'warn'` | Controls LaTeX nodes |
+| `components` | custom renderer map | built-in defaults | Overrides renderers by node id |
+| `highlight` | `boolean \| HighlightInterface` | `true` | Controls code highlighting |
+| `titleLevelStart` | `number` | `1` | Offsets heading levels before clamping to `h1`-`h6` |
 
-Type-only imports (when your package includes `src/`):
+## Notes
 
-```ts
-import type { KMarkdownVueOptions } from '@kuankuan/k-markdown-vue/src/options';
-import { defaultSymbol, stringSymbol } from '@kuankuan/k-markdown-vue/src/symbols';
-```
-
-Notes:
-
-- **`latex`**
-  - `'default'` renders with KaTeX and default `{ throwOnError: false }`.
-  - `KatexOptions` lets you pass KaTeX options (merged).
-  - `'warn'` shows `"<LaTeX is not allowed>"`.
-  - `'ignore'` (and `undefined`) renders nothing for LaTeX nodes.
-
-- **`xml`**
-  - `'warn'` shows `"<XML is not allowed>"`.
-  - `'preserve'` renders as `<node.args.name v-bind="node.args.attributes">...</node.args.name>`.
-  - `function` receives the `KMarkdownXMLNode` and can return a `VNode` (or return nothing).
-
-Security: if your Markdown is untrusted, avoid `xml: 'preserve'`.
-
-## Node Renderers
-
-This library renders the AST nodes produced by `@kuankuan/k-markdown-parser`.
-
-- If a node id has a matching renderer in `options.components`, that component is used.
-- Otherwise it falls back to a default wrapper (keyed by `defaultSymbol`).
-- Plain string segments are rendered by the renderer keyed by `stringSymbol`.
-
-Built-in renderer ids (provided by default):
-
-`title`, `paragraph`, `quote-block`, `code-block`, `code-inline`, `latex-block`, `latex-inline`,
-`line-between`, `bold`, `italic`, `delete-line`, `subscript`, `superscript`, `image`, `link`,
-`email`, `unordered-list`, `unordered-list-item`, `ordered-list`, `ordered-list-item`, `table`,
-`table-row`, `xml`.
-
-The parser also supports other node types (e.g. `emoji`, `task-list`, `table-cell`). If you enable
-those syntaxes, consider providing corresponding components via `options.components`.
-
-### Custom Components
-
-You can override any node renderer by id:
-
-```ts
-import type { Component } from 'vue';
-import type { KMarkdownNode } from '@kuankuan/k-markdown-parser';
-
-const MyCodeBlock: Component<{ node: KMarkdownNode }> = {
-  /* ... */
-};
-
-const options = {
-  components: {
-    'code-block': MyCodeBlock,
-  },
-};
-```
-
-Tip: `defaultSymbol` and `stringSymbol` live in `src/symbols.ts` in this repo and can be used as
-special keys to override the fallback renderer and plain-text renderer.
-
-## Parser Options
-
-`parserOptions` is the same `Option` type accepted by `@kuankuan/k-markdown-parser`.
-You can customize syntaxes (`syntaxes`), node mapping (`nodeMap`), and more. See the parser docs:
-<https://github.com/kuankuan2007/k-markdown-parser>
+- `highlight: true` dynamically loads `highlight.js` on demand.
+- `xml: 'show'` should only be used for trusted content.
+- `latex: 'show'` renders with KaTeX using `{ throwOnError: false }`.
 
 ## Development
 
 ```bash
-npm i
-npm run build
-npm run type-check
-npm run lint
-npm run format
+pnpm install
+pnpm build
+pnpm type-check
+pnpm lint
 ```
-
-Build output:
-
-- `dist/index.mjs` (ESM)
-- `dist/index.js` (CJS)
-- `dist/index.css`
 
 ## License
 
-Mulan Permissive Software License, Version 2 (MulanPSL-2.0). See [LICENSE](./LICENSE).
+MulanPSL-2.0. See [LICENSE](./LICENSE).
