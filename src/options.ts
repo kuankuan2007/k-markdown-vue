@@ -50,7 +50,7 @@ export function parseOptions(options: KMarkdownVueOptions | undefined): KMarkdow
     {
       components: defaultComponents,
       xml: defaultXMLOptions,
-      latex: 'default',
+      latex: defaultLatexOptions,
       highlight: defaultHighlightOptions,
       titleLevelStart: defaultTitleLevelStart,
     },

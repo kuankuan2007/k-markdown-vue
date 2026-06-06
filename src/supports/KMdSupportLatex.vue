@@ -12,7 +12,6 @@
 import { onMounted, useTemplateRef, watch } from 'vue';
 import { type LatexOptions } from '../options';
 import katex, { type KatexOptions } from 'katex';
-import 'katex/dist/katex.css';
 
 const props = defineProps<{
   content: string;
@@ -44,7 +43,11 @@ function render(
   });
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+@use "sass:meta";
+.k-markdown-cmp-latex {
+  @include meta.load-css("katex/dist/katex.css");
+}
 .k-markdown-cmp-latex .warn {
   opacity: 0.5;
 }
